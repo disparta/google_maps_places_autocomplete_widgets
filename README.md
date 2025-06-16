@@ -126,6 +126,72 @@ and optional parameters.
 This includes the use of the address autocomplete TextFormField widget to fill
 multiple other TextFormFields from the user's selected address suggestion.
 
+## Proxy Example
+This code shows an example of a proxy created using Firebase Cloud Functions.
+
+```javascript
+
+/**
+ * Proxy endpoint for Google Places Autocomplete API
+ *
+ * @description Handles requests to fetch place predictions based on user input
+ * @param {Object} req - Express request object containing input in the body
+ * @param {Object} res - Express response object for sending results
+ * @returns {Object} JSON response with place predictions or error details
+ *
+ * @throws {Error} Throws errors for missing input, API failures,
+ * or internal processing issues
+ */
+const corsHandler = cors({ origin: true });
+export const placesApiProxy = onRequest(async (req: any, res: any) => {
+  corsHandler(req, res, async () => {
+    if (req.method === "OPTIONS") {
+      return res.status(204).send("");
+    }
+    try {
+      // const { input } = req.body;
+      const { input, types } = req.query;
+  
+      if (!input) {
+        logger.warn("placesApiProxy | missing input", req.body);
+        return res.status(400).json({ error: "Missing input" });
+      }
+
+      const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+      const googleRes = await got(
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json",
+        {
+          searchParams: { input, types: "address", key: apiKey },
+          responseType: "json",
+        }
+      );
+
+      const body = googleRes.body as any;
+      if (body.status !== "OK") {
+        logger.error("Google API returned error status", {
+          status: body.status,
+          error_message: body.error_message,
+        });
+        return res.status(502).json({
+          error: "Places API error",
+          status: body.status,
+          message: body.error_message,
+        });
+      }
+
+      return res.status(200).json({
+        predictions: body.predictions,
+        status: body.status,
+      });
+    } catch (err: any) {
+      return res
+        .status(500)
+        .json({ error: "Internal error", details: err.message });
+    }
+  });
+});
+```
+
 ## Additional information
 
 This package implements the official documentation of Google Maps Places API
