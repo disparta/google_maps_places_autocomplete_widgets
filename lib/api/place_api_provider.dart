@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_places_autocomplete_widgets/api/autocomplete_types.dart';
 import 'package:http/http.dart';
@@ -144,7 +145,7 @@ result["predictions"] =
     );
 
     //Add Proxy support for web
-    if (proxyUrl != null && proxyUrl.isNotEmpty) {
+    if ((kIsWeb || kIsWasm) && (proxyUrl != null && proxyUrl.isNotEmpty)) {
       final proxyRequest = Uri.tryParse(proxyUrl) ??
           Uri(
             scheme: 'https',
@@ -162,7 +163,6 @@ result["predictions"] =
     }
 
     final response = await client.get(request);
-    debugPrint("response.body: ${response.body}");
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
