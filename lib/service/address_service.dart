@@ -28,8 +28,11 @@ class AddressService {
     );
   }
 
-  Future<Place> getPlaceDetail(String placeId) async {
-    Place placeDetails = await apiClient.getPlaceDetailFromId(placeId);
+  Future<Place> getPlaceDetail(String placeId, {String? proxyUrl}) async {
+    Place placeDetails = await apiClient.getPlaceDetailFromId(
+      placeId,
+      proxyUrl: proxyUrl,
+    );
     return placeDetails;
   }
 }

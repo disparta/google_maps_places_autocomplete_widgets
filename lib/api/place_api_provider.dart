@@ -303,7 +303,7 @@ result["result"]
   */
   ///Requests full address info from Google Places API for the specified
   ///[placeId] and returns a [Place] object returned info.
-  Future<Place> getPlaceDetailFromId(String placeId) async {
+  Future<Place> getPlaceDetailFromId(String placeId, {String? proxyUrl}) async {
     // if you want to get the details of the selected place by place_id
     final Map<String, dynamic> parameters = <String, dynamic>{
       'place_id': placeId,
@@ -311,15 +311,33 @@ result["result"]
       'key': mapsApiKey,
       'sessiontoken': sessionToken
     };
-    final Uri request = Uri(
-        scheme: 'https',
-        host: 'maps.googleapis.com',
-        path: '/maps/api/place/details/json',
+    Uri request = Uri(
+      scheme: 'https',
+      host: 'maps.googleapis.com',
+      path: '/maps/api/place/details/json',
 
-        //PlaceApiNew     host: 'places.googleapis.com',
-        //PlaceApiNew     path: '/v1/places/$placeId',
+      //PlaceApiNew     host: 'places.googleapis.com',
+      //PlaceApiNew     path: '/v1/places/$placeId',
 
-        queryParameters: parameters);
+      queryParameters: parameters,
+    );
+    //Add Proxy support for web
+    if ((kIsWeb || kIsWasm) && (proxyUrl != null && proxyUrl.isNotEmpty)) {
+      final proxyRequest = Uri.tryParse(proxyUrl) ??
+          Uri(
+            scheme: 'https',
+            host: 'maps.googleapis.com',
+            path: '/maps/api/place/details/json',
+            queryParameters: parameters,
+          );
+
+      request = Uri(
+        scheme: proxyRequest.scheme,
+        host: proxyRequest.host,
+        path: proxyRequest.path,
+        queryParameters: parameters,
+      );
+    }
 
     if (debugJson) {
       debugPrint(request.toString());

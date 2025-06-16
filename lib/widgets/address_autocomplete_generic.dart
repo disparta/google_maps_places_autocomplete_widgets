@@ -253,7 +253,10 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
                 widget.onSuggestionClick != null) {
               // If they need more details now do async request
               // for Place details..
-              Place place = await addressService.getPlaceDetail(s.placeId);
+              Place place = await addressService.getPlaceDetail(
+                s.placeId,
+                proxyUrl: widget.proxyUrl,
+              );
               if (widget.onSuggestionClickGetTextToUseForControl != null) {
                 controller?.text =
                     widget.onSuggestionClickGetTextToUseForControl!(place) ??
