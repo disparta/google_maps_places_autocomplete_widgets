@@ -44,6 +44,9 @@ abstract class AddresssAutocompleteStatefulWidget extends StatefulWidget {
   ///your maps api key, must not be null
   abstract final String mapsApiKey;
 
+  ///your proxy url for web
+  abstract final String? proxyUrl;
+
   ///builder used to render each item displayed
   ///must not be null
   abstract final Widget Function(Suggestion, int)? buildItem;
@@ -318,20 +321,22 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
           'You can only supply value for [type], [types] (or deprecated `postalCodeLookup`).  No combinations allowed');
 
       _lastText = text;
-      suggestions = await addressService.search(text,
-          includeFullSuggestionDetails:
-              (widget.onInitialSuggestionClick != null),
-          types: [
-            if (widget.postalCodeLookup == true)
-              AutoCompleteType.postalCode
-            else if (widget.postalCodeLookup == false ||
-                (widget.type == null && widget.types == null))
-              AutoCompleteType.address
-            else if (widget.type != null)
-              widget.type!
-            else if (widget.types != null)
-              ...widget.types!
-          ]);
+      suggestions = await addressService.search(
+        text,
+        includeFullSuggestionDetails: (widget.onInitialSuggestionClick != null),
+        types: [
+          if (widget.postalCodeLookup == true)
+            AutoCompleteType.postalCode
+          else if (widget.postalCodeLookup == false ||
+              (widget.type == null && widget.types == null))
+            AutoCompleteType.address
+          else if (widget.type != null)
+            widget.type!
+          else if (widget.types != null)
+            ...widget.types!
+        ],
+        proxyUrl: widget.proxyUrl,
+      );
     }
     if (entry != null) {
       entry!.markNeedsBuild();

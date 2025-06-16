@@ -18,10 +18,14 @@ class AddressService {
 
   Future<List<Suggestion>> search(String query,
       {bool includeFullSuggestionDetails = false,
-      List<AutoCompleteType> types = const [AutoCompleteType.address]}) async {
-    return await apiClient.fetchSuggestions(query,
-        includeFullSuggestionDetails: includeFullSuggestionDetails,
-        types: types);
+      List<AutoCompleteType> types = const [AutoCompleteType.address],
+      String? proxyUrl}) async {
+    return await apiClient.fetchSuggestions(
+      query,
+      includeFullSuggestionDetails: includeFullSuggestionDetails,
+      types: types,
+      proxyUrl: proxyUrl,
+    );
   }
 
   Future<Place> getPlaceDetail(String placeId) async {

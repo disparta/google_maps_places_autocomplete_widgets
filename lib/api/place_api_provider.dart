@@ -104,7 +104,8 @@ result["predictions"] =
   ///   instead of address type information.
   Future<List<Suggestion>> fetchSuggestions(String input,
       {bool includeFullSuggestionDetails = false,
-      required List<AutoCompleteType> types}) async {
+      required List<AutoCompleteType> types,
+      String? proxyUrl}) async {
     /// OK, we need to check the types array..
     String typesString = '';
     for (final type in types) {
@@ -135,13 +136,33 @@ result["predictions"] =
           .addAll(<String, dynamic>{'components': 'country:$compomentCountry'});
     }
 
-    final Uri request = Uri(
-        scheme: 'https',
-        host: 'maps.googleapis.com',
-        path: '/maps/api/place/autocomplete/json',
-        queryParameters: parameters);
+    Uri request = Uri(
+      scheme: 'https',
+      host: 'maps.googleapis.com',
+      path: '/maps/api/place/autocomplete/json',
+      queryParameters: parameters,
+    );
+
+    //Add Proxy support for web
+    if (proxyUrl != null && proxyUrl.isNotEmpty) {
+      final proxyRequest = Uri.tryParse(proxyUrl) ??
+          Uri(
+            scheme: 'https',
+            host: 'maps.googleapis.com',
+            path: '/maps/api/place/autocomplete/json',
+            queryParameters: parameters,
+          );
+
+      request = Uri(
+        scheme: proxyRequest.scheme,
+        host: proxyRequest.host,
+        path: proxyRequest.path,
+        queryParameters: parameters,
+      );
+    }
 
     final response = await client.get(request);
+    debugPrint("response.body: ${response.body}");
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
