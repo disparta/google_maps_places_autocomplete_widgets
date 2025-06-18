@@ -131,17 +131,6 @@ This code shows an example of a proxy created using Firebase Cloud Functions.
 
 ```javascript
 
-/**
- * Proxy endpoint for Google Places Autocomplete API
- *
- * @description Handles requests to fetch place predictions based on user input
- * @param {Object} req - Express request object containing input in the body
- * @param {Object} res - Express response object for sending results
- * @returns {Object} JSON response with place predictions or error details
- *
- * @throws {Error} Throws errors for missing input, API failures,
- * or internal processing issues
- */
 const corsHandler = cors({ origin: true });
 export const placesApiProxy = onRequest(async (req: any, res: any) => {
   corsHandler(req, res, async () => {
@@ -149,41 +138,41 @@ export const placesApiProxy = onRequest(async (req: any, res: any) => {
       return res.status(204).send("");
     }
     try {
-      // const { input } = req.body;
-      const { input, types } = req.query;
-  
-      if (!input) {
-        logger.warn("placesApiProxy | missing input", req.body);
-        return res.status(400).json({ error: "Missing input" });
-      }
+      const { input, place_id: placeId } = req.query;
 
       const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-      const googleRes = await got(
+      let googleRes = await got(
         "https://maps.googleapis.com/maps/api/place/autocomplete/json",
         {
-          searchParams: { input, types: "address", key: apiKey },
+          searchParams: { input, "types": "address", "key": apiKey },
           responseType: "json",
         }
       );
-
-      const body = googleRes.body as any;
-      if (body.status !== "OK") {
-        logger.error("Google API returned error status", {
-          status: body.status,
-          error_message: body.error_message,
-        });
-        return res.status(502).json({
-          error: "Places API error",
-          status: body.status,
-          message: body.error_message,
-        });
+      // If the place_id is set, we hit the details api instead.
+      if (placeId) {
+        googleRes = await got(
+          "https://maps.googleapis.com/maps/api/place/details/json",
+          {
+            searchParams: {
+              "placeid": placeId, "types": "address",
+              "key": apiKey,
+            },
+            responseType: "json",
+          }
+        );
       }
 
-      return res.status(200).json({
-        predictions: body.predictions,
-        status: body.status,
-      });
+      logger.debug("placesApiProxy | googleRes:", googleRes);
+      const body = googleRes.body as any;
+      logger.debug("placesApiProxy | response:", body);
+
+      return res.status(200).json(body);
     } catch (err: any) {
+      logger.error("placesApiProxy | caught error:", {
+        message: err.message,
+        stack: err.stack,
+        responseBody: err.response?.body,
+      });
       return res
         .status(500)
         .json({ error: "Internal error", details: err.message });

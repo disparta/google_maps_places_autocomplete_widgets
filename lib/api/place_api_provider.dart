@@ -145,7 +145,7 @@ result["predictions"] =
     );
 
     //Add Proxy support for web
-    if ((kIsWeb || kIsWasm) && (proxyUrl != null && proxyUrl.isNotEmpty)) {
+    if ((proxyUrl != null && proxyUrl.isNotEmpty)) {
       final proxyRequest = Uri.tryParse(proxyUrl) ??
           Uri(
             scheme: 'https',
@@ -322,7 +322,7 @@ result["result"]
       queryParameters: parameters,
     );
     //Add Proxy support for web
-    if ((kIsWeb || kIsWasm) && (proxyUrl != null && proxyUrl.isNotEmpty)) {
+    if ((proxyUrl != null && proxyUrl.isNotEmpty)) {
       final proxyRequest = Uri.tryParse(proxyUrl) ??
           Uri(
             scheme: 'https',
