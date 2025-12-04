@@ -377,7 +377,7 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
         margin: const EdgeInsets.fromLTRB(2, 2, 2, 2),
         padding: const EdgeInsets.all(8),
         alignment: Alignment.centerLeft,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         child: Text(suggestion.description));
   }
 }
