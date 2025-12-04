@@ -291,10 +291,14 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
               children: [
                 buildListViewerBuilder, //...buildList(),
                 if (widget.showGoogleTradeMark)
-                  const Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: Text('powered by google'),
-                  )
+                   Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('powered by google',
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                    ),
+                  ),
               ],
             ),
           )));
@@ -377,7 +381,11 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
         margin: const EdgeInsets.fromLTRB(2, 2, 2, 2),
         padding: const EdgeInsets.all(8),
         alignment: Alignment.centerLeft,
-        color: Theme.of(context).colorScheme.surface,
-        child: Text(suggestion.description));
+        color: Theme.of(context).colorScheme.primaryContainer,
+        child: Text(suggestion.description,
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
+        ),);
   }
 }
