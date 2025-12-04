@@ -376,12 +376,13 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
   /// Provides default implementation of Suggestion list item builder
   Widget defaultItemBuilder(Suggestion suggestion, int index) {
     return Container(
-        margin: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-        padding: const EdgeInsets.all(8),
-        alignment: Alignment.centerLeft,
-        color: Theme.of(context).cardColor,
-        child: Text(suggestion.description,
+      margin: const EdgeInsets.fromLTRB(2, 2, 2, 2),
+      padding: const EdgeInsets.all(8),
+      alignment: Alignment.centerLeft,
+      child: Text(
+        suggestion.description,
         style: Theme.of(context).textTheme.bodyLarge,
-        ),);
+      ),
+    );
   }
 }
