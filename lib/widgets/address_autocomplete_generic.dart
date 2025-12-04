@@ -294,9 +294,7 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
                    Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text('powered by google',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
+                      style: Theme.of(context).textTheme.labelMedium,
                     ),
                   ),
               ],
@@ -381,11 +379,9 @@ mixin SuggestionOverlayMixin<T extends AddresssAutocompleteStatefulWidget>
         margin: const EdgeInsets.fromLTRB(2, 2, 2, 2),
         padding: const EdgeInsets.all(8),
         alignment: Alignment.centerLeft,
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).cardColor,
         child: Text(suggestion.description,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
+        style: Theme.of(context).textTheme.bodyLarge,
         ),);
   }
 }

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d68d031c-4b0c-4e1f-a08b-62714b863d14" name="Changes" comment="UPDATE: Remove white color on default item" />
+    <list default="true" id="d68d031c-4b0c-4e1f-a08b-62714b863d14" name="Changes" comment="UPDATE: Use primaryContainer" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -152,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764882183767</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="UPDATE: Use primaryContainer">
+      <option name="closed" value="true" />
+      <created>1764882431243</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1764882431243</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -181,6 +189,7 @@
     <MESSAGE value="FIX: getDetails not using the proxy url" />
     <MESSAGE value="UPDATE: If proxy url is supplied, we use that instead of google api on all platforms" />
     <MESSAGE value="UPDATE: Remove white color on default item" />
-    <option name="LAST_COMMIT_MESSAGE" value="UPDATE: Remove white color on default item" />
+    <MESSAGE value="UPDATE: Use primaryContainer" />
+    <option name="LAST_COMMIT_MESSAGE" value="UPDATE: Use primaryContainer" />
   </component>
 </project>
